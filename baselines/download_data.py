@@ -58,7 +58,11 @@ def prepare_task_data(config: str, task: str, out_dir: Path):
                 out_mention["label_description"] = event2desc[label_id]["en"][1]
             out_mentions += [out_mention]
 
-        with open(out_dir / f"{data_split}.jsonl", "w") as wf:
+        out_path = out_dir / f"{data_split}.jsonl"
+        if data_split == "validation":
+            out_path = out_dir / "dev.jsonl"  # naming convention
+
+        with open(out_path, "w") as wf:
             for mention in out_mentions:
                 wf.write(json.dumps(mention, ensure_ascii=False) + "\n")
 
@@ -89,5 +93,7 @@ if __name__ == "__main__":
 
     args = load_args()
 
-    args.out.mkdir(exist_ok=True)
-    prepare_task_data(args.config, args.task, args.out)
+    out_path = args.out_dir / f"{args.config}-{args.task}"
+    out_path.mkdir(exist_ok=True, parents=True)
+
+    prepare_task_data(args.config, args.task, out_path)

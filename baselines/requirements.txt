@@ -1,0 +1,5 @@
+torch==1.8.2
+transformers==4.11.3
+rank-bm25==0.2.1
+datasets
+scipy
